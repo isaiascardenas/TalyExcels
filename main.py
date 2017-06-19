@@ -1,32 +1,41 @@
 from Excel import Excel
+from Helpers import findChange, isNew, getChange
 
-FECHA = 0
-RUT = 2
-PRODUCTO = 3
-ESTADO = 5
+diferentes = []
+faltantes = []
 
 # print("\nIngrese en nombre del archivo del supervisor: \n")
-# bossFileName = input()
-# bossFile = Excel()
-# userFile.readFile(bossFileName)
+bossFileName = raw_input("\nIngrese en nombre del archivo del supervisor: \n")
+# print(bossFileName)
 bossFile = Excel()
-bossFile.readFile("planillaJefa.ods")
+bossFile.readFile(bossFileName)
+# bossFile = Excel()
+# bossFile.readFile("planillaJefa.ods")
 
 # print("\nIngrese en nombre de su archivo: \n")
-# userFileName = input()
-# userFile = Excel()
-# userFile.readFile(userFileName)
+userFileName = raw_input("\nIngrese en nombre de su archivo: \n")
 userFile = Excel()
-userFile.readFile("ACARAA Junioo.ods")
+userFile.readFile(userFileName)
+# userFile = Excel()
+# userFile.readFile("ACARAA Junioo.ods")
+userFile.cleanFile()
 
-# data = [["mako", "taly", "pistola","made"],[1,2,3,4],["a","b","c","d"],[0,9,8,7]]
-# outFile = Excel()
-# outFile.writeFile(data)
+header = ["FECHA","USUARIO","RUT","PRODUCTO","ESTADO"]
+faltantes.append(["Faltantes"])
+faltantes.append(header)
+diferentes.append(["Diferentes"])
+diferentes.append(header)
 
-for userRow in userFile.rows:
-	for bossRow in bossFile.rows:
-		if bossRow[RUT] == userRow[RUT]:
-			print(bossRow[RUT]) #rut
+for bossRow in bossFile.rows:
+	if getChange(bossRow, userFile.cleanRows) is not None:
+		aux = getChange(bossRow, userFile.cleanRows)
+		diferentes.append([aux[0],aux[1],aux[2],aux[3],aux[5]])
 
+for userRow in userFile.cleanRows:
+	if isNew(userRow, bossFile.rows):
+		aux = userRow
+		faltantes.append([aux[0],aux[1],aux[2],aux[3],aux[5]])
+faltantes.append([])
 
-# print(json.dumps(data, default=datetime_handler))
+outFile = Excel()
+outFile.writeFile(faltantes+diferentes)

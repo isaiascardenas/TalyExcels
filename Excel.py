@@ -6,6 +6,7 @@ class Excel:
 		self.fileName = ""
 		self.rows = []
 		self.customers = []
+		self.cleanRows = []
 
 	def readFile(self, fileName):
 		rows = get_data(fileName)["Sheet1"]
@@ -14,6 +15,14 @@ class Excel:
 				rows[i][2] = rows[i][2].upper()
 				rows[i][3] = rows[i][3].upper()
 				self.rows.append(rows[i])
+
+	def cleanFile(self):
+		rows = self.rows
+		for i in range(0, len(rows)):
+			if len(rows[i][3]) != 0:
+				# print(rows[i])
+				self.cleanRows.append(rows[i])
+
 
 	def setCustomers(self):
 		rows = self.rows
