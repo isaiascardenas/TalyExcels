@@ -1,5 +1,4 @@
 from pyexcel_ods import get_data, save_data
-# import pyexcel as pe
 
 class Excel:
 	def __init__(self):
@@ -9,18 +8,23 @@ class Excel:
 		self.cleanRows = []
 
 	def readFile(self, fileName):
-		rows = get_data(fileName)["Sheet1"]
-		for i in range(0,len(rows)):
-			if len(rows[i]) > 1:
-				rows[i][2] = rows[i][2].upper()
-				rows[i][3] = rows[i][3].upper()
-				self.rows.append(rows[i])
+		try:
+			rows = get_data(fileName)["Sheet1"]
+			for i in range(0,len(rows)):
+				if len(rows[i]) > 1:
+					rows[i][2] = rows[i][2].upper()
+					rows[i][3] = rows[i][3].upper()
+					self.rows.append(rows[i])
+			return True
+
+		except Exception as e:
+			print("\n\nNo es posible leer el archivo, asegurese de que el nombre del archivo sea correcto\n")
+			return False
 
 	def cleanFile(self):
 		rows = self.rows
 		for i in range(0, len(rows)):
 			if len(rows[i][3]) != 0:
-				# print(rows[i])
 				self.cleanRows.append(rows[i])
 
 
